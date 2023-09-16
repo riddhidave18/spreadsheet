@@ -1,63 +1,9 @@
 import re
 import math
 import logging
+# import spreadsheetUtility as utility
+from spreadsheetUtility import Node
 
-class Node:
-    def __init__(self,key):
-        """ init Node tree class """
-        self.left = None
-        self.right = None
-        self.val = key
-
-    def isOperator(self,c):
-        """checks the function """
-        if ( c=='+' or c == '-' or c == '*' or c == '/'):
-            return True
-        else:
-            return False
-
-    def constructTree(self,postfixCellValue):
-        """Input: list of postfix expression
-            Output: Tree """
-        stack = []
-        try:
-            for char in postfixCellValue:
-                t = Node(char)
-                if self.isOperator(char):  
-                    t1 = stack.pop()
-                    t2 = stack.pop()
-                    t.right = t1
-                    t.left = t2    
-                stack.append(t)
-            t = stack.pop()
-            return t
-        except Exception as e:
-            print(e)
-            raise
-
-    def computeCells(self,root):
-        """recursive call to calculate tree"""
-
-        if root is None:
-            return 0
-        if root.left is None and root.right is None:
-            return int(root.val)  
-        left_sum =self.computeCells(root.left)
-        right_sum = self.computeCells(root.right)
-        
-        if root.val == '+':
-            return left_sum + right_sum
-
-        if root.val == '-':
-            return left_sum - right_sum
-
-        if root.val == '*':
-            return left_sum * right_sum
-
-        if root.val == '/':
-            return left_sum / right_sum
-        
-        
 class Spreadsheet:
     def __init__(self):
         """Initialize main spreadsheet class """
@@ -67,7 +13,7 @@ class Spreadsheet:
     
     def infixToPostfix(self,infixList):
         """Convert Infix list to PostFix List""" 
-
+        print(infixList)
         stack = []
         postfixList = [] 
         for character in infixList:
@@ -85,6 +31,7 @@ class Spreadsheet:
                 stack.append(character)
         while stack:
             postfixList.append(stack.pop())
+        print(postfixList)
         return postfixList
 
     def process_cellValue(self,cellValue):
@@ -119,29 +66,52 @@ class Spreadsheet:
         Updates value in spreadsheetdict
         """
         if cellValue.isnumeric():
-            self.spreadsheet_dict[cellName]=cellValue
+            self.spreadsheet_dict[cellName]=int(cellValue)
         else:
             value = self.process_cellValue(cellValue)
-            self.spreadsheet_dict[cellName]=value
+            self.spreadsheet_dict[cellName]=int(value)
         print(self.spreadsheet_dict)
         return True
 
 
     def getCellValue(self,cellName):
         """Get cell Value from dict"""
-        return( self.spreadsheet_dict.get(cellName))
+        if cellName in self.spreadsheet_dict:
+            return( int(self.spreadsheet_dict.get(cellName)))
+        else:
+            print(self.spreadsheet_dict)
+            print("Value does not exits. Please enter data first")
+            exit(0)
 
 if __name__ == '__main__':
     sheet1 = Spreadsheet()
+    run_flag=True
+    while run_flag:
+        print("Enter 1 or 2:", "\n","1: for set value to row","\n","2: for get value from row","\n","ctrl+c to exit")
+        action = input()
+        if action == '1':
+            rowName = input("Enter Row Name(E.g. A1/B1/C2):")
+            rowValue = input("Enter Row Value:(E.g. 5/7/ A1+A2)")
+            sheet1.setCellValue(rowName, rowValue)
+        elif action == '2':
+            rowName = input("Enter Row Name:")
+            print(sheet1.getCellValue(rowName))
+        else:
+            print("Error: Please select 1 or 2")
+            run_flag=False
+
+
+
     sheet1.setCellValue("A1",'5') 
     sheet1.setCellValue("A2",'6')
     sheet1.setCellValue("B2",'1')
-    print(sheet1.getCellValue("B2") ) #1
-    sheet1.setCellValue("A7",'A1*(A2+0)') #{'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30}
-    sheet1.setCellValue( "A8",'A1*(A2+B2)') # {'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30, 'A8': 35}
+    sheet1.setCellValue("A3",'A1+A2')
+    # print(sheet1.getCellValue("B2") ) #1
+    # sheet1.setCellValue("A7",'A1*(A2+0)') #{'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30}
+    # sheet1.setCellValue( "A8",'A1*(A2+B2)') # {'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30, 'A8': 35}
     # sheet1.setCellValue("A3",'A1+A9') #raise Exception 
     # sheet1.setCellValue("A4",'A1*(A2+5.0)') #raise Exception
-    sheet1.setCellValue("A5",'(A1/A2)')
+    sheet1.setCellValue("A5",'((A1/A2)*B2)+A3')
 
 
 
