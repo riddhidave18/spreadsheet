@@ -102,16 +102,16 @@ if __name__ == '__main__':
 
 
 
-    sheet1.setCellValue("A1",'5') 
-    sheet1.setCellValue("A2",'6')
-    sheet1.setCellValue("B2",'1')
-    sheet1.setCellValue("A3",'A1+A2')
+    # sheet1.setCellValue("A1",'5') 
+    # sheet1.setCellValue("A2",'6')
+    # sheet1.setCellValue("B2",'1')
+    # sheet1.setCellValue("A3",'A1+A2')
     # print(sheet1.getCellValue("B2") ) #1
     # sheet1.setCellValue("A7",'A1*(A2+0)') #{'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30}
     # sheet1.setCellValue( "A8",'A1*(A2+B2)') # {'A1': '5', 'A2': '6', 'B2': '1', 'A7': 30, 'A8': 35}
     # sheet1.setCellValue("A3",'A1+A9') #raise Exception 
     # sheet1.setCellValue("A4",'A1*(A2+5.0)') #raise Exception
-    sheet1.setCellValue("A5",'((A1/A2)*B2)+A3')
+    # sheet1.setCellValue("A5",'((A1/A2)*B2)+A3')
 
 
 
